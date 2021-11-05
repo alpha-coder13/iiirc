@@ -14,6 +14,10 @@ class Server:
         self.p2pprotocols=p2p_protocols
         self.external_ip=None
         self.external_port=None
+
+        if not (blockchain_module and connection_pools and p2p_protocols):
+            logger.error("Unable to instantiate, Blockchain creation failed.")
+            raise Exception("Unable to start")
     
     async def Get_Ext_IP(self):
         self.external_ip=await get_external_ip()
@@ -27,7 +31,7 @@ class Server:
                 try:
                     message=BaseSchema().loads(decoded_data)
                 except MarshmallowError:
-                    logger.msg("[ Undefined Data format found ]",peer=writer)
+                    logger.info("[ Undefined Data format found ]",peer=writer)
                 writer.address=message["meta"]["address"] #gets the address of the peer
                 
                 self.connectionpool.add(writer.address)
@@ -47,7 +51,7 @@ class Server:
 
     async def listen(self,hostname = "0.0.0.0",port = 8888):
         block_server=await asyncio.start_server(self.Callback,hostname,port)
-        logger.msg("[The server is serving from host ={} on port={}]".format(hostname,port))
+        logger.info("[The server is serving from host ={} on port={}]".format(hostname,port))
         async with block_server:
             await block_server.serve_forever()
 
