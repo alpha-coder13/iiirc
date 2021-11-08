@@ -1,7 +1,7 @@
 import json
 import hashlib
 import random
-from datetime import datetime, time
+from time import time 
 from asyncio.tasks import sleep
 import structlog
 import asyncio
@@ -24,7 +24,7 @@ class Blockchain:
             Transaction=self.transactions,
             previous_hash=self.chain[-1]['Hash'] if self.last_block else None ,
             Target=self.target,
-            timestamp=time.isoformat(time()),
+            timestamp=time(),
             nonce="{}".format(random.getrandbits(64))
         )
         
@@ -89,6 +89,18 @@ class Blockchain:
         
     def add_transaction():
         pass
+
+    async def blocks_until_timestamp(self, timestamp):
+        b=self.chain
+        k=1
+        number_of_blocks=0
+        while True:
+            if(b[k]['Timestamp']<timestamp) :
+                number_of_blocks+=1
+                k+=1
+            else :
+                break
+        return number_of_blocks
 
     def add_block(self,Block):
         #Validation logic method to be added
