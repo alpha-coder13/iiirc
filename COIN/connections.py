@@ -38,7 +38,7 @@ class ConnectionPool:
         port=writer.address["port"]
         return "{}:{}".format(ip,port)
 
-    def get_alive_peers(self):
+    def get_alive_peers(self,number):
         ##returns the nummbers of alive peer
         ##how can we do that , set a timers count for each connection and update it at regualr intervals of (ten secs)
         pass
